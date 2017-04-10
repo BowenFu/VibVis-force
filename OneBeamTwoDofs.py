@@ -113,7 +113,7 @@ class OneBeamTwoDofs:
                         frequency_max=frequency_max,
                         mode_number_min=mode_number_min,
                         mode_number_max=mode_number_max,
-                        modal_analysis=False,
+                        modal_analysis=True,
                         wavelet_analysis=wavelet_analysis,
                         frequency_domain_analysis=True)
         inline_force_visulization = ForceVisualization(

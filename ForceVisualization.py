@@ -156,9 +156,9 @@ def _contour(
 
     X, Y = numpy.meshgrid(x, y, indexing='ij')
     contour_range = numpy.linspace(colorbar_min, colorbar_max, contour_num)
-    variable[variable > colorbar_max] = colorbar_max
-    variable[variable < colorbar_min] = colorbar_min
-    matplotlib.pyplot.contour(X, Y, variable, contour_range, colors=color)
+    # variable[variable > colorbar_max] = colorbar_max
+    # variable[variable < colorbar_min] = colorbar_min
+    matplotlib.pyplot.contour(X, Y, variable, contour_range, colors=color, extend='both')
     matplotlib.pyplot.tight_layout()
     for out_filename in out_filenames:
         matplotlib.pyplot.savefig(out_filename)
@@ -224,9 +224,9 @@ def _contourf(
 
     X, Y = numpy.meshgrid(x, y, indexing='ij')
     contourf_range = numpy.linspace(colorbar_min, colorbar_max, contourf_num)
-    variable[variable > colorbar_max] = colorbar_max
-    variable[variable < colorbar_min] = colorbar_min
-    matplotlib.pyplot.contourf(X, Y, variable, contourf_range, cmap=cmap)
+    # variable[variable > colorbar_max] = colorbar_max
+    # variable[variable < colorbar_min] = colorbar_min
+    matplotlib.pyplot.contourf(X, Y, variable, contourf_range, cmap=cmap, extend='both')
 
     if colorbar:
         colorbar_ax = matplotlib.pyplot.colorbar().ax
@@ -308,10 +308,10 @@ def _contourf_contour(
     X, Y = numpy.meshgrid(x, y, indexing='ij')
     contourf_range = numpy.linspace(colorbar_min, colorbar_max, contourf_num)
     contour_range = numpy.linspace(colorbar_min, colorbar_max, contour_num)
-    variable[variable > colorbar_max] = colorbar_max
-    variable[variable < colorbar_min] = colorbar_min
-    matplotlib.pyplot.contour(X, Y, variable, contour_range, colors=color)
-    matplotlib.pyplot.contourf(X, Y, variable, contourf_range, cmap=cmap)
+    # variable[variable > colorbar_max] = colorbar_max
+    # variable[variable < colorbar_min] = colorbar_min
+    matplotlib.pyplot.contour(X, Y, variable, contour_range, colors=color, extend='both')
+    matplotlib.pyplot.contourf(X, Y, variable, contourf_range, cmap=cmap, extend='both')
     contour_range = numpy.round(
         contour_range[::2],
         decimals=-int(

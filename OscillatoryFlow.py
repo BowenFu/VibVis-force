@@ -33,9 +33,13 @@ class OneBeamTwoDofs:
             length,
             diameter,
             bending_stiffness,
-            ):
+            fluid_density,
+            fluid_velocity):
         time, inline_force, crossflow_force =\
             numpy.loadtxt(force_filename, unpack=True)
+
+        self._fluid_density = fluid_density
+        self._fluid_velocity = fluid_velocity
 
         self._inline_force_data = ForceData(
             time=time, force=inline_force)
@@ -82,8 +86,8 @@ class OneBeamTwoDofs:
             force_max,
             force_delta,
             force_std,
-            velocity_min,
-            velocity_max,
+            # velocity_min,
+            # velocity_max,
             curvature_min,
             curvature_max,
             curvature_delta,
@@ -93,8 +97,8 @@ class OneBeamTwoDofs:
             mode_number_min,
             mode_number_max,
             modal_weight_force_delta,
-            reduced_velocity_max,
-            period,
+            # reduced_velocity_max,
+            # period,
             make_animation=False,
             contour_curvature=False,
             wavelet_analysis=False):
@@ -102,6 +106,8 @@ class OneBeamTwoDofs:
                 ForceAnalysis(
                         force_data=self._inline_force_data,
                         beam=self._beam,
+                        fluid_density=self._fluid_density,
+                        fluid_velocity=self._fluid_velocity,
                         start_time=start_time,
                         end_time=end_time,
                         frequency_min=frequency_min,
@@ -127,7 +133,9 @@ class OneBeamTwoDofs:
             contour_num=11)
         inline_force_visulization.subplot_modal_power_spectral_density(
             self._append_filetypes(
-                'inline_modal_power_spectral_density_subplot'))
+                'inline_modal_power_spectral_density_subplot'),
+                figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
+            )
         inline_force_visulization.contourf_wavelet_dominant_frequency(
             self._append_filetypes(
                 'inline_wavelet_dominant_frequency_contourf'),
@@ -205,8 +213,8 @@ class OneBeamTwoDofs:
 
         inline_force_visulization.plot_time_history_force(
             out_filenames=self._append_filetypes(
-                'inline_force_node_40'),
-            node_i=40,
+                'inline_force_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             force_label=r'$x\cdot D^{-1}$',
@@ -216,10 +224,11 @@ class OneBeamTwoDofs:
             figsize=(style.SINGLE_COLUMN_WIDTH,
                      style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
 
+        '''
         inline_force_visulization.plot_force_along_time_function(
             out_filenames=self._append_filetypes(
-                'inline_force_reduced_velocity_node_40'),
-            node_i=40,
+                'inline_force_reduced_velocity_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             time_function=lambda time : reduced_velocity_max*numpy.abs(numpy.cos(2*numpy.pi*time/period)),
@@ -229,11 +238,12 @@ class OneBeamTwoDofs:
             force_max=force_max,
             grid=True,
             )
+        '''
 
         inline_force_visulization.plot_time_history_force_deviation(
             out_filenames=self._append_filetypes(
-                'inline_force_deviation_node_40'),
-            node_i=40,
+                'inline_force_deviation_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             force_deviation_label=r'$(x-\bar{x})\cdot D^{-1}$',
@@ -243,14 +253,15 @@ class OneBeamTwoDofs:
                      style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
 
         input_time_referece_tuple = tuple()
-        if os.path.isfile(self._save_directory + "crossflow_force_node_40.txt"):
+        if os.path.isfile(self._save_directory + "crossflow_force_middle.txt"):
             input_time_referece_tuple = tuple(
                 numpy.loadtxt(self._save_directory +
-                              "crossflow_force_node_40.txt"))
+                              "crossflow_force_middle.txt"))
 
+        '''
         inline_force_visulization.plot_time_history_velocity(
-            out_filenames=self._append_filetypes('inline_velocity_node_40'),
-            node_i=40,
+            out_filenames=self._append_filetypes('inline_velocity_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             velocity_label=r'$U_r$',  #r'$\dot{x}\cdot (f_n^1 D)^{-1}$',
@@ -261,6 +272,7 @@ class OneBeamTwoDofs:
             grid=False,
             figsize=(style.SINGLE_COLUMN_WIDTH,
                      style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
+        '''
 
         inline_force_visulization.subplot_modal_weight_force(
             out_filenames=self._append_filetypes('inline_mode'),
@@ -416,8 +428,8 @@ class OneBeamTwoDofs:
             force_max,
             force_delta,
             force_std,
-            velocity_min,
-            velocity_max,
+            # velocity_min,
+            # velocity_max,
             curvature_min,
             curvature_max,
             curvature_delta,
@@ -427,14 +439,16 @@ class OneBeamTwoDofs:
             mode_number_min,
             mode_number_max,
             modal_weight_force_delta,
-            reduced_velocity_max,
-            period,
+            # reduced_velocity_max,
+            # period,
             make_animation=False,
             contour_curvature=False,
             wavelet_analysis=False):
         crossflow_force_analysis = ForceAnalysis(
             force_data=self._crossflow_force_data,
             beam=self._beam,
+            fluid_density=self._fluid_density,
+            fluid_velocity=self._fluid_velocity,
             start_time=start_time,
             end_time=end_time,
             frequency_min=frequency_min,
@@ -454,7 +468,9 @@ class OneBeamTwoDofs:
             self._append_filetypes('crossflow_power_spectral_density_subplot'))
         crossflow_force_visulization.subplot_modal_power_spectral_density(
             self._append_filetypes(
-                'crossflow_modal_power_spectral_density_subplot'))
+                'crossflow_modal_power_spectral_density_subplot'),
+                figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
+            )
         crossflow_force_visulization.contourf_power_spectral_density(
             self._append_filetypes(
                 'crossflow_power_spectral_density_contourf'),
@@ -548,10 +564,10 @@ class OneBeamTwoDofs:
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
-        crossflow_force_node_40 = crossflow_force_visulization.plot_time_history_force(
+        crossflow_force_middle = crossflow_force_visulization.plot_time_history_force(
             out_filenames=self._append_filetypes(
-                'crossflow_force_node_40'),
-            node_i=40,
+                'crossflow_force_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             force_label=r'$y\cdot D^{-1}$',
@@ -561,15 +577,16 @@ class OneBeamTwoDofs:
             grid=False,
             figsize=(style.SINGLE_COLUMN_WIDTH,
                      style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
-        if crossflow_force_node_40:
-            with open(self._save_directory + 'crossflow_force_node_40.txt',
+        if crossflow_force_middle:
+            with open(self._save_directory + 'crossflow_force_middle.txt',
                       'wb') as outfile:
-                numpy.savetxt(outfile, crossflow_force_node_40, fmt='%.4e')
+                numpy.savetxt(outfile, crossflow_force_middle, fmt='%.4e')
 
+        '''
         crossflow_force_visulization.plot_force_along_time_function(
             out_filenames=self._append_filetypes(
-                'crossflow_force_reduced_velocity_node_40'),
-            node_i=40,
+                'crossflow_force_reduced_velocity_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             time_function=lambda time : reduced_velocity_max*numpy.abs(numpy.cos(2*numpy.pi*time/period)),
@@ -582,20 +599,22 @@ class OneBeamTwoDofs:
             # figsize=(style.SINGLE_COLUMN_WIDTH,
             #          style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5)
             )
+        '''
 
         crossflow_force_visulization.plot_time_history_force_deviation(
             out_filenames=self._append_filetypes(
-                'crossflow_force_deviation_node_40'),
-            node_i=40,
+                'crossflow_force_deviation_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             force_deviation_label=r'$(y-\bar{y})\cdot D^{-1}$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta, )
 
+        '''
         crossflow_force_visulization.plot_time_history_velocity(
-            out_filenames=self._append_filetypes('crossflow_velocity_node_40'),
-            node_i=40,
+            out_filenames=self._append_filetypes('crossflow_velocity_middle'),
+            node_i=10,
             start_time=start_time,
             end_time=end_time,
             velocity_label=r'$V_r$',
@@ -606,6 +625,7 @@ class OneBeamTwoDofs:
             grid=False,
             figsize=(style.SINGLE_COLUMN_WIDTH,
                      style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
+        '''
 
         crossflow_force_visulization.subplot_modal_weight_force(
             out_filenames=self._append_filetypes('crossflow_mode'),
