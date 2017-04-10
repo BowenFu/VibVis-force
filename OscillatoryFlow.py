@@ -74,7 +74,7 @@ class OneBeamTwoDofs:
             for filetype in self._filetypes
         ]
 
-    # x
+    # C_D
     def plot_inline_force(
             self,
             # for force_analysis
@@ -163,7 +163,7 @@ class OneBeamTwoDofs:
                 [self._save_directory + 'inline_force_animation.gif'],
                 start_time=start_time,
                 end_time=end_time,
-                xlabel=r'$x\cdot D^{-1}$',
+                xlabel=r'$C_D$',
                 xmin=force_min,
                 xmax=force_max)
 
@@ -198,7 +198,7 @@ class OneBeamTwoDofs:
                 'inline_subplot_force'),
             start_time=start_time,
             end_time=end_time,
-            force_label=r'$x\cdot D^{-1}$',
+            force_label=r'$C_D$',
             force_min=force_min,
             force_max=force_max)
 
@@ -207,7 +207,7 @@ class OneBeamTwoDofs:
                 'inline_subplot_force_deviation'),
             start_time=start_time,
             end_time=end_time,
-            force_deviation_label=r'$(x-\bar{x})\cdot D^{-1}$',
+            force_deviation_label=r'$(C_D-\bar{C_D})$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
@@ -217,7 +217,7 @@ class OneBeamTwoDofs:
             node_i=10,
             start_time=start_time,
             end_time=end_time,
-            force_label=r'$x\cdot D^{-1}$',
+            force_label=r'$C_D$',
             force_min=force_min,
             force_max=force_max,
             grid=True,
@@ -233,7 +233,7 @@ class OneBeamTwoDofs:
             end_time=end_time,
             time_function=lambda time : reduced_velocity_max*numpy.abs(numpy.cos(2*numpy.pi*time/period)),
             xlabel=r'$U_r$',
-            force_label=r'$x\cdot D^{-1}$',
+            force_label=r'$C_D$',
             force_min=0, # here set as 0
             force_max=force_max,
             grid=True,
@@ -246,7 +246,7 @@ class OneBeamTwoDofs:
             node_i=10,
             start_time=start_time,
             end_time=end_time,
-            force_deviation_label=r'$(x-\bar{x})\cdot D^{-1}$',
+            force_deviation_label=r'$(C_D-\bar{C_D})$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta,
             figsize=(style.SINGLE_COLUMN_WIDTH,
@@ -264,7 +264,7 @@ class OneBeamTwoDofs:
             node_i=10,
             start_time=start_time,
             end_time=end_time,
-            velocity_label=r'$U_r$',  #r'$\dot{x}\cdot (f_n^1 D)^{-1}$',
+            velocity_label=r'$U_r$',  #r'$\dot{C_D}\cdot (f_n^1 D)^{-1}$',
             velocity_min=velocity_min,
             velocity_max=velocity_max,
             reduced_velocity='fundamental_natural_frequency',
@@ -278,7 +278,7 @@ class OneBeamTwoDofs:
             out_filenames=self._append_filetypes('inline_mode'),
             start_time=start_time,
             end_time=end_time,
-            ylabel=r'$u^m\cdot D^{-1}$',
+            ylabel=r'$u^m$',
             ymin=-modal_weight_force_delta,
             ymax=modal_weight_force_delta,
             figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
@@ -287,7 +287,7 @@ class OneBeamTwoDofs:
         inline_force_mean = inline_force_visulization.plot_force_mean(
             self._append_filetypes('inline_force_mean_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$x\cdot D^{-1}$',
+            xlabel=r'$C_D$',
             xmin=force_min,
             xmax=force_max, )
         with open(self._save_directory +
@@ -297,7 +297,7 @@ class OneBeamTwoDofs:
         inline_curvature_mean = inline_force_visulization.plot_curvature_mean(
             self._append_filetypes('inline_curvature_mean_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$x\cdot D^{-1}$',
+            xlabel=r'$C_D$',
             xmin=curvature_min,
             xmax=curvature_max, )
         with open(self._save_directory +
@@ -307,7 +307,7 @@ class OneBeamTwoDofs:
         inline_std = inline_force_visulization.plot_force_std(
             self._append_filetypes('inline_force_std_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$\sigma_x\cdot D^{-1}$',
+            xlabel=r'$\sigma_x$',
             xmin=0,
             xmax=force_std, )
         numpy.savetxt(self._save_directory +
@@ -332,8 +332,8 @@ class OneBeamTwoDofs:
                 'inline_mean_std_force_curvature{:.1f}_{:.1f}'.format(
                     start_time, end_time)),
             xlabel_list=[
-                r'$\bar{x}\cdot D^{-1}$', r'$\bar{c}_x\cdot D$',
-                r'$\sigma_x\cdot D^{-1}$', r'$\sigma_{c_x}\cdot D$'
+                r'$\bar{C_D}$', r'$\bar{c}_x\cdot D$',
+                r'$\sigma_x$', r'$\sigma_{c_x}\cdot D$'
             ],
             xmin_list=[force_min, curvature_min, 0, 0],
             xmax_list=[
@@ -354,7 +354,7 @@ class OneBeamTwoDofs:
                 colorbar_max=force_delta,
                 contourf_num=51,
                 contour_num=11,
-                colorbar_zlabel=r'$x\cdot D^{-1}$')
+                colorbar_zlabel=r'$C_D$')
             inline_force_visulization.contour_spatio_temporal_force(
                 self._append_filetypes(
                     'inline_spatio_temporal_force_contour_{:.1f}'.
@@ -377,7 +377,7 @@ class OneBeamTwoDofs:
                     colorbar_max=curvature_delta,
                     contourf_num=51,
                     contour_num=11,
-                    colorbar_zlabel=r'$c_{x}\cdot D^{-1}$')
+                    colorbar_zlabel=r'$c_{C_D}$')
                 inline_force_visulization.contour_spatio_temporal_curvature(
                     self._append_filetypes(
                         'inline_spatio_temporal_curvature_contour_{:.1f}'.
@@ -393,7 +393,7 @@ class OneBeamTwoDofs:
         for time in numpy.arange(start_time, end_time, short_step):
             inline_force_visulization.plot_outline(
                 self._append_filetypes('inline_outline_{:.1f}'.format(time)),
-                xlabel=r'$x\cdot D^{-1}$',
+                xlabel=r'$C_D$',
                 xmin=force_min,
                 xmax=force_max,
                 start_time=time,
@@ -402,7 +402,7 @@ class OneBeamTwoDofs:
             inline_force_visulization.plot_deviation_outline(
                 self._append_filetypes(
                     'inline_deviation_outline_{:.1f}'.format(time)),
-                xlabel=r'$(x-\bar{x})\cdot D^{-1}$',
+                xlabel=r'$(C_D-\bar{C_D})$',
                 xmin=-force_delta,
                 xmax=force_delta,
                 start_time=time,
@@ -417,7 +417,7 @@ class OneBeamTwoDofs:
                 fmt='%.4e')
         print('Inline plotting finished.')
 
-    # y
+    # C_L
     def plot_crossflow_force(
             self,
             # for force_analysis
@@ -510,7 +510,7 @@ class OneBeamTwoDofs:
                 ],
                 start_time=start_time,
                 end_time=end_time,
-                xlabel=r'$y\cdot D^{-1}$',
+                xlabel=r'$C_L$',
                 xmin=force_min,
                 xmax=force_max)
             '''
@@ -518,7 +518,7 @@ class OneBeamTwoDofs:
                 [self._save_directory + 'crossflow_curvature_animation.gif'],
                 start_time=start_time,
                 end_time=end_time,
-                xlabel=r'$c_y\cdot D^{-1}$',
+                xlabel=r'$c_y$',
                 xmin=curvature_min,
                 xmax=curvature_max
             )
@@ -553,7 +553,7 @@ class OneBeamTwoDofs:
                 'crossflow_subplot_force'),
             start_time=start_time,
             end_time=end_time,
-            force_label=r'$y\cdot D^{-1}$',
+            force_label=r'$C_L$',
             force_min=force_min,
             force_max=force_max)
 
@@ -562,7 +562,7 @@ class OneBeamTwoDofs:
                 'crossflow_subplot_force_deviation'),
             start_time=start_time,
             end_time=end_time,
-            force_deviation_label=r'$(y-\bar{y})\cdot D^{-1}$',
+            force_deviation_label=r'$(C_L-\bar{C_L})$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
@@ -572,7 +572,7 @@ class OneBeamTwoDofs:
             node_i=10,
             start_time=start_time,
             end_time=end_time,
-            force_label=r'$y\cdot D^{-1}$',
+            force_label=r'$C_L$',
             force_min=force_min,
             force_max=force_max,
             reference_line_factor_tuple=(0.7071, 0.7071),
@@ -593,7 +593,7 @@ class OneBeamTwoDofs:
             end_time=end_time,
             time_function=lambda time : reduced_velocity_max*numpy.abs(numpy.cos(2*numpy.pi*time/period)),
             xlabel=r'$U_r$',
-            force_label=r'$y\cdot D^{-1}$',
+            force_label=r'$C_L$',
             force_min=0, # set as 0
             force_max=force_max,
             #reference_line_factor_tuple=(0.7071, 0.7071),
@@ -609,7 +609,7 @@ class OneBeamTwoDofs:
             node_i=10,
             start_time=start_time,
             end_time=end_time,
-            force_deviation_label=r'$(y-\bar{y})\cdot D^{-1}$',
+            force_deviation_label=r'$(C_L-\bar{C_L})$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta, )
 
@@ -620,7 +620,7 @@ class OneBeamTwoDofs:
             start_time=start_time,
             end_time=end_time,
             velocity_label=r'$V_r$',
-            #velocity_label=r'$\dot{y}\cdot (f_n^1 D)^{-1}$',
+            #velocity_label=r'$\dot{C_L}\cdot (f_n^1 D)^{-1}$',
             velocity_min=velocity_min,
             velocity_max=velocity_max,
             reduced_velocity='fundamental_natural_frequency',
@@ -633,7 +633,7 @@ class OneBeamTwoDofs:
             out_filenames=self._append_filetypes('crossflow_mode'),
             start_time=start_time,
             end_time=end_time,
-            ylabel=r'$v^m\cdot D^{-1}$',
+            ylabel=r'$v^m$',
             ymin=-modal_weight_force_delta,
             ymax=modal_weight_force_delta,
             figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
@@ -642,19 +642,19 @@ class OneBeamTwoDofs:
         crossflow_force_visulization.plot_force_mean(
             self._append_filetypes('crossflow_force_mean_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$y\cdot D^{-1}$',
+            xlabel=r'$C_L$',
             xmin=force_min,
             xmax=force_max, )
         crossflow_force_visulization.plot_curvature_mean(
             self._append_filetypes('crossflow_curvature_mean_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$y\cdot D^{-1}$',
+            xlabel=r'$C_L$',
             xmin=curvature_min,
             xmax=curvature_max, )
         crossflow_force_visulization.plot_force_std(
             self._append_filetypes('crossflow_force_std_{:.1f}_{:.1f}'.
                                    format(start_time, end_time)),
-            xlabel=r'$\sigma_y\cdot D^{-1}$',
+            xlabel=r'$\sigma_y$',
             xmin=0,
             xmax=force_std, )
         crossflow_force_visulization.plot_curvature_std(
@@ -667,7 +667,7 @@ class OneBeamTwoDofs:
             self._append_filetypes(
                 'crossflow_std_force_curvature{:.1f}_{:.1f}'.format(
                     start_time, end_time)),
-            xlabel_list=[r'$\sigma_y\cdot D^{-1}$', r'$\sigma_{c_y}\cdot D$'],
+            xlabel_list=[r'$\sigma_y$', r'$\sigma_{c_y}\cdot D$'],
             xmin_list=[0, 0],
             xmax_list=[force_std, curvature_std], )
 
@@ -684,7 +684,7 @@ class OneBeamTwoDofs:
                 colorbar_max=force_delta,
                 contourf_num=51,
                 contour_num=7,
-                colorbar_zlabel=r'$y\cdot D^{-1}$')
+                colorbar_zlabel=r'$C_L$')
             crossflow_force_visulization.contour_spatio_temporal_force(
                 self._append_filetypes(
                     'crossflow_spatio_temporal_force_contour_{:.1f}'.
@@ -707,7 +707,7 @@ class OneBeamTwoDofs:
                     colorbar_max=curvature_delta,
                     contourf_num=51,
                     contour_num=7,
-                    colorbar_zlabel=r'$c_{y}\cdot D^{-1}$')
+                    colorbar_zlabel=r'$c_{C_L}$')
                 crossflow_force_visulization.contour_spatio_temporal_curvature(
                     self._append_filetypes(
                         'crossflow_spatio_temporal_curvature_contour_{:.1f}'.
@@ -724,7 +724,7 @@ class OneBeamTwoDofs:
             crossflow_force_visulization.plot_outline(
                 self._append_filetypes('crossflow_outline_{:.1f}'.format(
                     time)),
-                xlabel=r'$y\cdot D^{-1}$',
+                xlabel=r'$C_L$',
                 xmin=force_min,
                 xmax=force_max,
                 start_time=time,
@@ -733,7 +733,7 @@ class OneBeamTwoDofs:
             crossflow_force_visulization.plot_deviation_outline(
                 self._append_filetypes(
                     'crossflow_deviation_outline_{:.1f}'.format(time)),
-                xlabel=r'$(y-\bar{y})\cdot D^{-1}$',
+                xlabel=r'$(C_L-\bar{C_L})$',
                 xmin=-force_delta,
                 xmax=force_delta,
                 start_time=time,
