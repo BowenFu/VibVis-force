@@ -280,7 +280,9 @@ class OneBeamTwoDofs:
             end_time=end_time,
             ylabel=r'$u^m\cdot D^{-1}$',
             ymin=-modal_weight_force_delta,
-            ymax=modal_weight_force_delta)
+            ymax=modal_weight_force_delta,
+            figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
+            )
 
         inline_force_mean = inline_force_visulization.plot_force_mean(
             self._append_filetypes('inline_force_mean_{:.1f}_{:.1f}'.
@@ -633,7 +635,9 @@ class OneBeamTwoDofs:
             end_time=end_time,
             ylabel=r'$v^m\cdot D^{-1}$',
             ymin=-modal_weight_force_delta,
-            ymax=modal_weight_force_delta)
+            ymax=modal_weight_force_delta,
+            figsize=(style.SINGLE_COLUMN_WIDTH, style.SINGLE_COLUMN_SHORT_HEIGHT)
+            )
 
         crossflow_force_visulization.plot_force_mean(
             self._append_filetypes('crossflow_force_mean_{:.1f}_{:.1f}'.
