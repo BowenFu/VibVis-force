@@ -708,7 +708,7 @@ class ForceVisualization:
         matplotlib.pyplot.xlabel(xlabel)
         matplotlib.pyplot.ylabel(r'$z\cdot L^{-1}$')
 
-        matplotlib.pyplot.tight_layout()
+        # matplotlib.pyplot.tight_layout()
         if save:
             for out_filename in out_filenames:
                 figure.savefig(out_filename)
@@ -1109,7 +1109,7 @@ class ForceVisualization:
             matplotlib.pyplot.setp(axis.get_yticklabels(), visible=False)
             axis.set_ylabel(r' ')
 
-        matplotlib.pyplot.tight_layout()
+        # matplotlib.pyplot.tight_layout()
         for out_filename in out_filenames:
             figure.savefig(out_filename)
         matplotlib.pyplot.close()

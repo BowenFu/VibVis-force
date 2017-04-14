@@ -230,7 +230,7 @@ class OneBeamTwoDofs:
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
-        for node_i in [20, 40, 60]:
+        for node_i in [5, 10, 15]:
             inline_force_visulization.plot_time_history_force(
                 out_filenames=self._append_filetypes(
                     'inline_force_node_{:d}'.format(node_i)),
@@ -542,22 +542,6 @@ class OneBeamTwoDofs:
                 force_deviation_label=r'$(C_L-\bar{C_L})$',
                 force_deviation_min=-force_delta,
                 force_deviation_max=force_delta, )
-
-            crossflow_force_visulization.plot_time_history_velocity(
-                out_filenames=self._append_filetypes('crossflow_velocity_node_{:d}'.format(node_i)),
-                node_i=node_i,
-                start_time=start_time,
-                end_time=end_time,
-                xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-                velocity_label=r'$V_r$',
-                #velocity_label=r'$\dot{y}\cdot (f_n^1 D)^{-1}$',
-                velocity_min=velocity_min,
-                velocity_max=velocity_max,
-                reduced_velocity='fundamental_natural_frequency',
-                grid=True,
-                # figsize=(style.SINGLE_COLUMN_WIDTH,
-                #          style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5)
-                )
 
         crossflow_force_visulization.subplot_modal_weight_force(
             out_filenames=self._append_filetypes('crossflow_mode'),
