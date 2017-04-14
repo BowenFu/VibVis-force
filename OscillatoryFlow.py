@@ -61,7 +61,7 @@ class OneBeamTwoDofs:
         self._filetypes = filetypes
 
         self._beam.plot_modal_shapes(
-            self._append_filetypes('modal_shapes'), max_order=5)
+            self._append_filetypes('modal_shapes'), max_order=4)
 
         with open(self._save_directory + 'natural_frequencies.txt',
                   'wb') as file_:
@@ -222,7 +222,7 @@ class OneBeamTwoDofs:
             force_max=force_max,
             grid=True,
             figsize=(style.SINGLE_COLUMN_WIDTH,
-                     style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
+                     style.SINGLE_COLUMN_SHORT_HEIGHT))
 
         '''
         inline_force_visulization.plot_force_along_time_function(
@@ -250,15 +250,15 @@ class OneBeamTwoDofs:
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta,
             figsize=(style.SINGLE_COLUMN_WIDTH,
-                     style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
+                     style.SINGLE_COLUMN_SHORT_HEIGHT))
 
+        '''
         input_time_referece_tuple = tuple()
         if os.path.isfile(self._save_directory + "crossflow_force_middle.txt"):
             input_time_referece_tuple = tuple(
                 numpy.loadtxt(self._save_directory +
                               "crossflow_force_middle.txt"))
 
-        '''
         inline_force_visulization.plot_time_history_velocity(
             out_filenames=self._append_filetypes('inline_velocity_middle'),
             node_i=10,
@@ -566,7 +566,7 @@ class OneBeamTwoDofs:
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
-        crossflow_force_middle = crossflow_force_visulization.plot_time_history_force(
+        crossflow_force_visulization.plot_time_history_force(
             out_filenames=self._append_filetypes(
                 'crossflow_force_middle'),
             node_i=10,
@@ -575,16 +575,16 @@ class OneBeamTwoDofs:
             force_label=r'$C_L$',
             force_min=force_min,
             force_max=force_max,
-            reference_line_factor_tuple=(0.7071, 0.7071),
-            grid=False,
+            # reference_line_factor_tuple=(0.7071, 0.7071),
+            grid=True,
             figsize=(style.SINGLE_COLUMN_WIDTH,
-                     style.SINGLE_COLUMN_SHORT_HEIGHT / 1.5))
+                     style.SINGLE_COLUMN_SHORT_HEIGHT))
+        '''
         if crossflow_force_middle:
             with open(self._save_directory + 'crossflow_force_middle.txt',
                       'wb') as outfile:
                 numpy.savetxt(outfile, crossflow_force_middle, fmt='%.4e')
 
-        '''
         crossflow_force_visulization.plot_force_along_time_function(
             out_filenames=self._append_filetypes(
                 'crossflow_force_reduced_velocity_middle'),

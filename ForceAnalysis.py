@@ -39,7 +39,7 @@ class ForceAnalysis:
     Parameters
     ----------
     force_data : ForceData instance
-        Nondimensionalized force data.
+        Dimensionalized force data.
     beam : Beam instance
         Beam property.
     start_time : float
