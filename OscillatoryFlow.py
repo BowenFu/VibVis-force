@@ -226,7 +226,7 @@ class OneBeamTwoDofs:
             start_time=start_time,
             end_time=end_time,
             xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-            force_deviation_label=r'$(C_D-\overline{C_D})$',
+            force_deviation_label=r'$C_D-\overline{C_D}$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
@@ -253,7 +253,7 @@ class OneBeamTwoDofs:
                 start_time=start_time,
                 end_time=end_time,
                 xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-                force_deviation_label=r'$(C_Dx-\bar{C_Dx})$',
+                force_deviation_label=r'$C_D-\overline{C_D}$',
                 force_deviation_min=-force_delta,
                 force_deviation_max=force_delta,
                 # figsize=(style.SINGLE_COLUMN_WIDTH,
@@ -332,7 +332,7 @@ class OneBeamTwoDofs:
             inline_force_visulization.plot_deviation_outline(
                 self._append_filetypes(
                     'inline_deviation_outline_{:.1f}'.format(time)),
-                xlabel=r'$(C_D-\bar{C_D})$',
+                xlabel=r'$C_D-\overline{C_D}$',
                 xmin=-force_delta,
                 xmax=force_delta,
                 start_time=time,
@@ -436,8 +436,8 @@ class OneBeamTwoDofs:
             start_time=start_time,
             end_time=end_time,
             xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-            ymin=frequency_min,
-            ymax=frequency_max,
+            ymin=frequency_min / normalized_frequency_by_value,
+            ymax=frequency_max / normalized_frequency_by_value,
             ylabel=r'$f_L\cdot {:s}^{{-1}}$'.format(normalized_frequency_by_symbol),
             num=9)
 
@@ -500,7 +500,7 @@ class OneBeamTwoDofs:
             start_time=start_time,
             end_time=end_time,
             xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-            force_deviation_label=r'$(C_L-\bar{C_L})$',
+            force_deviation_label=r'$C_L-\overline{C_L}$',
             force_deviation_min=-force_delta,
             force_deviation_max=force_delta)
 
@@ -539,7 +539,7 @@ class OneBeamTwoDofs:
                 start_time=start_time,
                 end_time=end_time,
                 xlabel=r'$t\cdot {:s}^{{-1}}$'.format(normalized_time_by_symbol),
-                force_deviation_label=r'$(C_L-\bar{C_L})$',
+                force_deviation_label=r'$C_L-\overline{C_L}$',
                 force_deviation_min=-force_delta,
                 force_deviation_max=force_delta, )
 
@@ -608,7 +608,7 @@ class OneBeamTwoDofs:
             crossflow_force_visulization.plot_deviation_outline(
                 self._append_filetypes(
                     'crossflow_deviation_outline_{:.1f}'.format(time)),
-                xlabel=r'$(C_L-\bar{C_L})$',
+                xlabel=r'$C_L-\overline{C_L}$',
                 xmin=-force_delta,
                 xmax=force_delta,
                 start_time=time,
