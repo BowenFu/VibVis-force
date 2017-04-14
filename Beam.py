@@ -105,6 +105,8 @@ class Beam:
         zero_r = numpy.zeros((1, shapes.shape[1]))
         shapes = numpy.r_[zero_r, shapes, zero_r]
         self._shapes = shapes / shapes_max
+        if self._shapes[self._shapes.shape[0]//2, 0] < 0:
+            self._shapes *= -1
 
         self._natural_frequencies = w / numpy.pi / 2
 

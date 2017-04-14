@@ -78,20 +78,26 @@ class ForceAnalysis:
                  frequency_max,
                  mode_number_min,
                  mode_number_max,
+                 normalized_time_by=1,
+                 normalized_frequency_by=1,
                  frequency_domain_analysis=False,
                  wavelet_analysis=False,
                  modal_analysis=False):
         self._force_data = force_data
         self._beam = beam
 
+        self._normalized_time_by = normalized_time_by
+
         self._fluid_density = fluid_density
         self._fluid_velocity = fluid_velocity
 
-        self._start_time = start_time
-        self._end_time = end_time
+        self._start_time = start_time / self._normalized_time_by
+        self._end_time = end_time / self._normalized_time_by
 
-        self._frequency_min = frequency_min
-        self._frequency_max = frequency_max
+        self._normalized_frequency_by = normalized_frequency_by
+
+        self._frequency_min = frequency_min / self._normalized_frequency_by
+        self._frequency_max = frequency_max / self._normalized_frequency_by
 
         self._mode_number_min_minus_one = mode_number_min - 1
         self._mode_number_max = mode_number_max
@@ -116,35 +122,24 @@ class ForceAnalysis:
             self._do_modal_analysis()
 
     def _preprocess_force_data(self):
-        if self.start_time < self._force_data.time[0]:
-            self._start_time = self._force_data.time[0]
+        self._time = self._force_data.time / self._normalized_time_by
+        if self.start_time < self._time[0]:
+            self._start_time = self._time[0]
             logging.warning('''
                     Start time has been set as {start_time}.
-                    '''.format(start_time=self.start_time))
+                    '''.format(start_time=self.start_time * self._normalized_time_by))
 
-        if self.end_time == -1 or self.end_time > self._force_data.time[
-                -1]:
-            self._end_time = self._force_data.time[-1]
+        if self.end_time == -1 or self.end_time > self._time[-1]:
+            self._end_time = self._time[-1]
             logging.warning('''
                     End time has been set as {end_time}.
-                    '''.format(end_time=self.end_time))
+                    '''.format(end_time=self.end_time * self._normalized_time_by))
 
-        time_mask = ((self._force_data.time >= self._start_time) &
-                     (self._force_data.time <= self._end_time))
-        self._time = self._force_data.time[time_mask]
+        time_mask = ((self._time >= self._start_time) &
+                     (self._time <= self._end_time))
+        self._time = self._time[time_mask]
         self._force = self._force_data.force[
-            time_mask] / (0.5 * self._fluid_density * self._fluid_velocity**2 * self._beam.diameter)
-
-        # calculate angle and curvature
-        angle = numpy.gradient(self.force, self.sampling_period,
-                               self._beam.node_spacing /
-                               self._beam.diameter)[1]
-        # divide this by diameter to make it non-dimenional
-
-        self._curvature = numpy.gradient(angle, self.sampling_period,
-                                         self._beam.node_spacing /
-                                         self._beam.diameter)[1]
-        # divide this by diameter to make it non-dimenional
+                time_mask] / (0.5 * self._fluid_density * self._fluid_velocity**2 * self._beam.diameter)
 
         # self._start_time = self._time[0]
         # self._end_time = self._time[-1]
@@ -157,6 +152,8 @@ class ForceAnalysis:
         self._fft_frequency = numpy.fft.fftfreq(
             self._fft_length,
             self.sampling_period)[:int(self._fft_length // 2)]
+
+        self._fft_frequency /= self._normalized_frequency_by
 
         # desirable frequency interval
         self._frequency_mask = numpy.multiply(
@@ -178,24 +175,6 @@ class ForceAnalysis:
         self._force_max = numpy.max(self.force, axis=0)
         self._force_deviation = self.force - self.force_mean
         self._force_std = numpy.std(self.force, axis=0)
-
-        self._curvature_mean = numpy.mean(self.curvature, axis=0)
-        self._curvature_min = numpy.min(self.curvature, axis=0)
-        self._curvature_max = numpy.max(self.curvature, axis=0)
-        self._curvature_deviation = self.curvature - self.curvature_mean
-        self._curvature_std = numpy.std(self.curvature, axis=0)
-
-        # calculate velocity and accelaration
-        self._velocity = numpy.gradient(
-            self.force,
-            self.sampling_period,
-            self._beam.node_spacing,
-            edge_order=2)[0]
-        self._accelaration = numpy.gradient(
-            self._velocity,
-            self.sampling_period,
-            self._beam.node_spacing,
-            edge_order=2)[0]
 
     def _do_frequency_domain_analysis(self):
         '''
@@ -251,19 +230,19 @@ class ForceAnalysis:
         '''
 
         from wavelets import WaveletAnalysis
-        self._wavelet = [
+        wavelets = [
             WaveletAnalysis(
                 force, time=self._time, dt=self.sampling_period)
             for force in self.force.T
         ]
-        frequencies = self.wavelet[0].fourier_frequencies
+        frequencies = wavelets[0].fourier_frequencies / self._normalized_frequency_by
         f_mask = numpy.multiply(frequencies - self.frequency_min,
                                 frequencies - self.frequency_max) <= 0
         self._wavelet_frequency = frequencies[f_mask]
         wavelet_dominant_frequencies = []
         self._wavelet_power = []
         # for i in range(len(self.wavelet)):
-        for wavelet_ in self.wavelet:
+        for wavelet_ in wavelets:
             power = wavelet_.wavelet_power
             power = power[f_mask]
             wavelet_power_spectral_density_max_index = numpy.argmax(
@@ -301,7 +280,7 @@ class ForceAnalysis:
             self._modal_power_spectral_density[self._frequency_mask]
         modal_power_spectral_density_max_index = numpy.argmax(
             self._modal_power_spectral_density, axis=0)
-        self._modal_oscillatory_frequencies = self._fft_frequency[
+        self._modal_oscillatory_frequencies = self.fft_frequency[
             modal_power_spectral_density_max_index]
         self._modal_weight_force_std = numpy.std(
             self._modal_weight_force, axis=0)
@@ -594,7 +573,7 @@ class ForceAnalysis:
         Modal natural frequency of the beam for each mode.
         '''
 
-        return self._beam.natural_frequencies
+        return self._beam.natural_frequencies / self._normalized_frequency_by
 
     @property
     def oscillatory_frequencies(self):
